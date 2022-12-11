@@ -1,0 +1,4 @@
+watchmedo shell-command \
+    --drop --wait \
+    --patterns="*.py" \
+    --command="clear && python main.py" 
