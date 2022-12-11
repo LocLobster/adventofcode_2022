@@ -1,5 +1,21 @@
-import os
+import math
 import re
+
+def read_re(filename):
+    data = []
+    for line in open(filename):
+        d = re.findall(f'\w+', line)
+        data.append(d)
+    
+
+    return data
+
+#def read_numbers(filename):
+#    data = []
+#    for line in open(filename):
+#        d = list(map(int, re.findall(f'\w+', line)))
+#        data.append(d)
+#    return data
 
 def read_file(filename):
     with open(filename, 'r') as f:
@@ -20,17 +36,16 @@ def read_file(filename):
     return data
 
 def first_part(data):
-    pass
+    for d in data:
+        print(d)
+        pass
 
 def second_part(data):
     pass
 
 
 if __name__ == '__main__':
-    data = read_file('input.txt')
-    
-    exit()
+    filename = 'input.txt'
+    data = read_re(filename)
     first_part(data)
-    
-    exit()
-    second_part(data)
+    #second_part(data)

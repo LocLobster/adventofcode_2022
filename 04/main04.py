@@ -33,6 +33,8 @@ def first_part(data):
 
     print(acc)
 
+    
+
 def second_part(data):
     acc = 0
     for d in data:
