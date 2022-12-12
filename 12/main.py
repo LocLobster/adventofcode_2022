@@ -9,12 +9,8 @@ EXPECTED_2 = 29
 def read_re(filename):
     data = []
 
-    lines = []
     y = 0 
-    
-    start = (0, 0)
     for line in open(filename):
-        lines.append(line)
         d = []
         x = 0
         for l in line:
@@ -31,7 +27,6 @@ def read_re(filename):
                 d.append(ord(l) - ord('a'))
             x += 1
         data.append(d)
-
         y += 1
 
     return data, start, end
@@ -39,7 +34,6 @@ def read_re(filename):
 def check_valid(loc, check, data):
     max_y = len(data)
     max_x = len(data[0])
-
     y = check[0]
     x = check[1]
 
@@ -57,6 +51,14 @@ def check_valid(loc, check, data):
 
     return True
 
+def checker(loc, check, data, dist):
+    result = check_valid(loc, check, data)
+    if result:
+        my_distance = dist[loc] + 1
+        if my_distance < dist[check]:
+            return True, my_distance
+    return False, None
+
 def first_part(input_data, start, end):
     iterations = 500
 
@@ -71,42 +73,15 @@ def first_part(input_data, start, end):
     for _ in range(iterations):
         locs = []
         for loc in prev_locations:
-            #up
-            check = (loc[0]-1, loc[1])
-            result = check_valid(loc, check, data)
-            if result:
-                my_distance = dist[loc] + 1
-                if my_distance < dist[check]:
-                    dist[check] = my_distance
-                    locs.append(check)
-            
-            #down
-            check = (loc[0]+1, loc[1])
+            checks = [(loc[0]-1, loc[1]), \
+                      (loc[0]+1, loc[1]), \
+                      (loc[0], loc[1]-1), \
+                      (loc[0], loc[1]+1)]
 
-            result = check_valid(loc, check, data)
-            if result:
-                my_distance = dist[loc] + 1
-                if my_distance < dist[check]:
-                    dist[check] = my_distance
-                    locs.append(check)
-            #left
-            check = (loc[0], loc[1]-1)
-
-            result = check_valid(loc, check, data)
-            if result:
-                my_distance = dist[loc] + 1
-                if my_distance < dist[check]:
-                    dist[check] = my_distance
-                    locs.append(check)
-
-            #right
-            check = (loc[0], loc[1]+1)
-
-            result = check_valid(loc, check, data)
-            if result:
-                my_distance = dist[loc] + 1
-                if my_distance < dist[check]:
-                    dist[check] = my_distance
+            for check in checks:
+                result, d = checker(loc, check, data, dist)
+                if result:
+                    dist[check] = d
                     locs.append(check)
         
         prev_locations = locs
@@ -147,6 +122,7 @@ if __name__ == '__main__':
     print(solution)
     pyperclip.copy(str(solution))
     
+    ## PART 2
     example2 = second_part(example_data, example_end)
     if example2 != EXPECTED_2:
         exit()
