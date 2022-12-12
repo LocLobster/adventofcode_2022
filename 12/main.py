@@ -60,10 +60,9 @@ def checker(loc, check, data, dist):
     return False, None
 
 def first_part(input_data, start, end):
-    iterations = 500
-
     max_y = len(input_data)
     max_x = len(input_data[0])
+    iterations = max_y * max_x
 
     data = np.array(input_data)
     dist = iterations * np.ones((max_y, max_x), dtype=int)
