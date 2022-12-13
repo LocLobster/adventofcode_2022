@@ -1,51 +1,58 @@
 import math
 import re
+import numpy as np
+import pyperclip
+
+EXPECTED_1 = 31
+EXPECTED_2 = 29
 
 def read_re(filename):
     data = []
+
     for line in open(filename):
-        d = re.findall(f'\w+', line)
+        d = list(map(int, re.findall(f'\S+', line)))
         data.append(d)
-    
-
-    return data
-
-#def read_numbers(filename):
-#    data = []
-#    for line in open(filename):
-#        d = list(map(int, re.findall(f'\w+', line)))
-#        data.append(d)
-#    return data
-
-def read_file(filename):
-    with open(filename, 'r') as f:
-        lines = f.readlines()
-    
-    data = {}
-    
-    for line in lines: 
-        l = line.strip()
-        spl = l.split()
-
-        print(f"{l}")
-        print(f"{spl}")
-
-        import code
-        code.interact(local=locals())
 
     return data
 
 def first_part(data):
     for d in data:
         print(d)
-        pass
+
+    solution = 0
+
+    return solution
 
 def second_part(data):
     pass
-
-
+                
 if __name__ == '__main__':
+    print("###################new run###################")
+    filename = 'example.txt'
+    example_data = read_re(filename)
+    example1 = first_part(example_data)
+    if example1 != EXPECTED_1:
+        exit()
+    
     filename = 'input.txt'
     data = read_re(filename)
-    first_part(data)
-    #second_part(data)
+    solution = first_part(data)
+
+    print("************************************")
+    print("*** PART 1 SOLUTION ****************")
+    print("************************************")
+    print(solution)
+    pyperclip.copy(str(solution))
+    
+    ## PART 2
+    example2 = second_part(example_data)
+    if example2 != EXPECTED_2:
+        exit()
+
+    solution = second_part(data)
+
+    print("---------------------------------")
+    print("---- Part 2 solution ------------")
+    print("---------------------------------")
+    print(solution)
+    pyperclip.copy(str(solution))
