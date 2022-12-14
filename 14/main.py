@@ -10,7 +10,6 @@ def read_re(filename):
     data = []
 
     for line in open(filename):
-        #d = list(map(int, re.findall(f'\S+,\S+', line)))
         reg = re.findall(f'\S+,\S+', line)
 
         d = []
@@ -46,12 +45,13 @@ def find_next(spot, grid):
     if grid[down_spot] == 0:
         new_spot = find_next(down_spot, grid)
     else:
-        dl_spot = (spot[0]+1, spot[1]-1)
+        # go down left
         if check(dl_spot, grid) is False:
             return False
         if grid[dl_spot] == 0:
             new_spot = find_next(dl_spot, grid)
         else:
+            # go down right
             if check(dr_spot, grid) is False:
                 return False
             if grid[dr_spot] == 0:
@@ -59,12 +59,9 @@ def find_next(spot, grid):
 
     return new_spot
 
-
 def first_part(data):
     global min_x
     global min_y
-    global max_x
-    global max_y
 
     allx =[]
     ally =[0]
@@ -79,20 +76,9 @@ def first_part(data):
     min_y = min(ally)
     max_y = max(ally) +1
 
-    print('min')
-    print(min(allx))
-    print(max(allx))
-    print(min(ally))
-    print(max(ally))
-
     grid = np.zeros((max_y-min_y, max_x-min_x), dtype=int)
-    print(grid)
-    print(grid.shape)
 
     start = shift( (0,500) )
-    print(start)
-
-    solution = 0
     for d in data:
         for i in range(len(d)-1):
             p1 = shift(d[i])
@@ -114,10 +100,8 @@ def first_part(data):
     acc = 0 
     # Start sand
     for _ in range(50000):
-        y = start[0]
-        x = start[1]
-    
         spot = find_next(start, grid)
+
         if spot is False:
             break
         acc  += 1
@@ -127,9 +111,6 @@ def first_part(data):
             break
 
     print(grid)
-    
-    print(acc)
-    
     return acc
 
 def second_part(data):
@@ -143,18 +124,10 @@ def second_part(data):
     
     min_x = min(allx)
     max_x = max(allx) + 1
-    min_y = min(ally)
     max_y = max(ally)
 
-    print('min')
-    print(min(allx))
-    print(max(allx))
-    print(min(ally))
-    print(max(ally))
-    
     data.append([(max_y+2, min_x-500), (max_y+2, max_x+500)])
     sol = first_part(data)
-    print(sol)
     return sol
                 
 if __name__ == '__main__':
