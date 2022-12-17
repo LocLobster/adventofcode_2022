@@ -10,7 +10,7 @@ def read_re(filename):
     data = []
 
     for line in open(filename):
-        d = list(map(int, re.findall(f'\S+', line)))
+        d = list(map(int, re.findall(f'-?\d+', line)))
         data.append(d)
 
     return data

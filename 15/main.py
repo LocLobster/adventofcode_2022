@@ -81,7 +81,6 @@ def get_points(point, distance):
 def second_part(data, search_area):
     dists = []
     for d in data:
-        print(d)
         dist = distance (d[0], d[1])
         dists.append(dist)
 
@@ -118,6 +117,7 @@ if __name__ == '__main__':
     print("*** PART 1 SOLUTION ****************")
     print("************************************")
     print(solution)
+    print("************************************")
     pyperclip.copy(str(solution))
     
     ## PART 2
@@ -131,4 +131,5 @@ if __name__ == '__main__':
     print("---- Part 2 solution ------------")
     print("---------------------------------")
     print(solution)
+    print("---------------------------------")
     pyperclip.copy(str(solution))
