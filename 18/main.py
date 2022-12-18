@@ -90,7 +90,7 @@ if __name__ == '__main__':
     print("###################new run###################")
     filename = 'example.txt'
     example_data = read_re(filename)
-    example1 = first_part_alt(example_data)
+    example1 = first_part(example_data)
     if example1 != EXPECTED_1:
         exit()
     
