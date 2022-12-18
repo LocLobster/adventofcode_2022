@@ -2,9 +2,7 @@ import math
 import re
 import numpy as np
 import pyperclip
-
-EXPECTED_1 = 31
-EXPECTED_2 = 29
+import itertools
 
 def read_re(filename):
     data = []
@@ -27,6 +25,9 @@ def second_part(data):
     pass
                 
 if __name__ == '__main__':
+    EXPECTED_1 = 31
+    EXPECTED_2 = 29
+
     print("###################new run###################")
     filename = 'example.txt'
     example_data = read_re(filename)
@@ -45,10 +46,15 @@ if __name__ == '__main__':
     pyperclip.copy(str(solution))
     
     ## PART 2
+    print("---- Part 2 Start  ---------------")
+    filename = 'example.txt'
+    example_data = read_re(filename)
     example2 = second_part(example_data)
     if example2 != EXPECTED_2:
         exit()
 
+    filename = 'input.txt'
+    data = read_re(filename)
     solution = second_part(data)
 
     print("---------------------------------")
