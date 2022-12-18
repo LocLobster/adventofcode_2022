@@ -145,7 +145,6 @@ def second_part(data):
 
     # This showed that the pattern repeats from the second set onwards.  Should write some matcher but I'm lazy. 
     # Note this means it doesn't work for the example input.  And won't work for all inputs
-    print("Printing height additions for each wind reset")
     for r in restarts[0:-1]:
         print(add_height[r:r+20])
 

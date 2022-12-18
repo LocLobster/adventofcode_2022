@@ -6,7 +6,7 @@ import itertools
 import random
 
 EXPECTED_1 = 1651
-EXPECTED_2 = 29
+EXPECTED_2 = 1707
 
 def read_re(filename):
     data = {}
@@ -14,7 +14,7 @@ def read_re(filename):
     for line in open(filename):
         d = re.findall(f'-?\d+', line)
         l = line.strip().split(' ')
-        print(l)
+        #print(l)
 
         lead = []
         length = len(l)
@@ -43,7 +43,7 @@ def get_distance(data, start):
 
         current_leads = next_leads
 
-    print(nodes)
+    #print(nodes)
     return(nodes)
 
     
@@ -78,8 +78,8 @@ def get_permutations(iterable, distance_map, r=None):
             return
 
 def get_perms(sorted_map, location='AA', nodes=[], level=0):
-    print('get_perms')
-    print(sorted_map[location])
+    #print('get_perms')
+    #print(sorted_map[location])
 
     d = sorted_map[location]
     d = dict((k, v) for k, v in d.items() if v <= 5)
@@ -96,7 +96,7 @@ def first_part(data, pressure):
     sorted_pressure = {k: v for k, v in sorted(pressure.items(), reverse=True, key=lambda item: item[1])}
 
     for p in sorted_pressure:
-        print(pressure[p])
+        #print(pressure[p])
         if pressure[p] > 0:
             positive.append(p)
 
@@ -175,7 +175,7 @@ def run_permuation(perm, distance_map, pressure, start_location='AA', time_limit
 def second_part(data, pressure, plan):
     positive = []
     for p in pressure:
-        print(pressure[p])
+        #print(pressure[p])
         if pressure[p] > 0:
             positive.append(p)
 
@@ -185,18 +185,21 @@ def second_part(data, pressure, plan):
         distance_map[d] = result
 
     remaining = list( set(positive) - set(plan))
-    print(f"remaining {remaining}")
+    #print(f"remaining {remaining}")
     
-    plan_set = set(positive)
+    positive_set = set(positive)
 
-    total_max_pressure = 0
-    combos = itertools.combinations(plan, math.trunc((len(plan_set))/2))
+    # Thought here is that we will use the same plan found in Plan 1.  But there is less time, so my plan will 
+    # have less places to visit.  
+    combos = itertools.combinations(plan, math.trunc(len(positive)/2))
+
     my_best = None
     elephant_best = None
+    total_max_pressure = 0
+    best_total = 0
     for combo in combos:
         my_set = set(combo)
-        elephant_set = plan_set - my_set
-
+        elephant_set = positive_set - my_set
         elephant = tuple(elephant_set)
 
         my_max_pressure = 0
@@ -213,7 +216,7 @@ def second_part(data, pressure, plan):
             if elephant_pressure > elephant_max_pressure:
                 elephant_max_pressure = elephant_pressure
                 elephant_best_perm = elephant_perm
-                elephant_best_time_left = my_time_left
+                elephant_best_time_left = elephant_time_left
 
         both_pressures = my_max_pressure + elephant_max_pressure
         if both_pressures > total_max_pressure:
@@ -223,39 +226,46 @@ def second_part(data, pressure, plan):
             my_remaining_time = my_best_time_left
             elephant_remaining_time = elephant_best_time_left
     
-        print(total_max_pressure)
-        print(my_best)
-        print(elephant_best)
-        print(my_remaining_time)
-        print(elephant_remaining_time)
+        print(f"My permutation: {my_best}")
+        print(f"Elephant perm : {elephant_best}")
+        print(f"Pressure: {total_max_pressure}")
+        # Printing remaining time to see if adding additional stops is necessary
+        print(f"Time remaining.  Mine:{my_remaining_time} Elephant:{elephant_remaining_time}")
         
-    pass
+        if total_max_pressure > best_total:
+            best_total = total_max_pressure
+        
+    return best_total
                 
 if __name__ == '__main__':
-    print("###################new run###################")
-    filename = 'example.txt'
-    example_data, example_pressures = read_re(filename)
-    example1 = first_part(example_data, example_pressures)
-    if example1 != EXPECTED_1:
-        exit()
-    
-    filename = 'input.txt'
-    data, pressures = read_re(filename)
-    solution = first_part(data, pressures)
-
-    print("************************************")
-    print("*** PART 1 SOLUTION ****************")
-    print("************************************")
-    print(solution)
-    pyperclip.copy(str(solution))
-    
+#    print("###################new run###################")
+#    filename = 'example.txt'
+#    example_data, example_pressures = read_re(filename)
+#    example1 = first_part(example_data, example_pressures)
+#    if example1 != EXPECTED_1:
+#        exit()
+#    
+#    filename = 'input.txt'
+#    data, pressures = read_re(filename)
+#    solution = first_part(data, pressures)
+#
+#    print("************************************")
+#    print("*** PART 1 SOLUTION ****************")
+#    print("************************************")
+#    print(solution)
+#    pyperclip.copy(str(solution))
+#    
     ## PART 2
     example_plan = ('BB', 'CC', 'DD', 'EE', 'HH', 'JJ')
+    filename = 'example.txt'
+    example_data, example_pressures = read_re(filename)
     example2 = second_part(example_data, example_pressures, example_plan)
     if example2 != EXPECTED_2:
         exit()
 
-    plan = ('SI', 'ZZ', 'AO', 'IF', 'EB', 'UH', 'ZQ', 'BH', 'KZ')
+    filename = 'input.txt'
+    data, pressures = read_re(filename)
+    plan = ('SI', 'ZZ', 'AO', 'IF', 'EB', 'UH', 'ZQ', 'BH')
     solution = second_part(data, pressures, plan)
 
     print("---------------------------------")
@@ -269,3 +279,6 @@ if __name__ == '__main__':
     # Guessed 1878. Too low
     # Guessed 2392. Too low
     # 2400 correct answer
+    # Best plan was
+    # ('ZZ', 'AO', 'IF', 'EB', 'UH', 'ZQ', 'BH')
+    # ('WG', 'IS', 'RW', 'KZ', 'MT', 'IP', 'NH', 'SI')
