@@ -60,38 +60,42 @@ def run(time_passed, materials, robots, next_robot, d, time_limit=24):
     if time_passed >= time_limit:
         return materials[3]
 
-#    # Part 1
-#    next_list = []
-#    if materials[1] <= d[4]:
-#        next_list += ['C']
-#
-#    if materials[0] <= max(d[2], d[3], d[5]):
-#        next_list += ['R']
-#
-#    #next_list = ['C']
-#    if sum(robots) < 5:
-#        next_list += ['R']
-#    # Some optimization
-#    if(robots[1] > 0):  # Only consider making obsidian robot if there is a clay robot
-#        next_list += ['O']
-#    if(robots[2] > 0):
-#        next_list += ['G']
-    
-    
-
-    # Part 2
+    # Some optimization
     next_list = []
+    # Don't create more ore robots if we get more ore every turn than the cost of the most expensive robot
     if robots[0] < max(d[2], d[3], d[5]):
         next_list += ['R']
-    if robots[1] < (d[4]):
+    if robots[1] < (d[4])/2+1:
         next_list += ['C']
 
-    # Some optimization
-    if(robots[1] > 0):  # Only consider making obsidian robot if there is a clay robot
-        next_list += ['O']
-    if(robots[2] > 0):
-        next_list += ['G']
+    # Time to make clay robot:
 
+    # Only consider making obsidian robot if there is a clay robot
+    if(robots[1] > 0):  
+        ttm_clay_robot  = (d[3] - materials[0])/robots[0]
+        ttm_obsid_robot = max( [math.trunc((d[3]-materials[0])/robots[0]), math.trunc((d[4]-materials[1])/robots[1]) ])
+    
+        leftover_ore =  robots[0] * ttm_clay_robot - d[3]
+        ttm_clay_and_obsid = max( [math.trunc((d[3]-leftover_ore)/robots[0]), math.trunc((d[4]-materials[1])/(robots[1]+1)) ])
+        ttm_clay_and_obsid += ttm_clay_robot
+
+        if ttm_obsid_robot <= ttm_clay_and_obsid:
+            next_list += ['O']
+
+    # Only consider making obsidian robot if there is an obsidian robot
+    if(robots[2] > 0):
+        ttm_obsid_robot = max( [math.trunc((d[3]-materials[0])/robots[0]), math.trunc((d[4]-materials[1])/robots[1]) ])
+        ttm_geode_robot = max( [math.trunc((d[5]-materials[0])/robots[0]), math.trunc((d[6]-materials[2])/robots[2]) ])
+    
+        leftover_ore =  robots[0] * ttm_clay_robot - d[3]
+        ttm_obsid_and_geode = max( [math.trunc((d[5]-leftover_ore)/robots[0]), math.trunc((d[6]-materials[2])/(robots[2]+1)) ])
+        ttm_obsid_and_geode += ttm_obsid_robot
+
+        if ttm_geode_robot <= ttm_obsid_and_geode:
+            next_list += ['G']
+        #next_list += ['G']
+
+    # If you already have a few geode robots.  Don't make any more clay or ore robots. Too late now to be ramping.
     if (robots[3]>3):
         next_list = ['O', 'G']
 
@@ -101,28 +105,19 @@ def run(time_passed, materials, robots, next_robot, d, time_limit=24):
         if result > my_max:
             my_max = result
 
-#    R = run(time_passed, np.copy(materials), np.copy(robots), "R", d)
-#    C = run(time_passed, np.copy(materials), np.copy(robots), "C", d)
-#    O = run(time_passed, np.copy(materials), np.copy(robots), "O", d)
-#    G = run(time_passed, np.copy(materials), np.copy(robots), "G", d)
-    
     return my_max
     
 def first_part(data):
 
     geode_list = []
     for d in data:
-        print(d)
         result_c = run(0, np.array([0,0,0,0]), np.array([1,0,0,0]),'C', d)
         result_r = run(0, np.array([0,0,0,0]), np.array([1,0,0,0]),'R', d)
 
-        print(max(result_c, result_r))
         geode_list.append(max(result_c, result_r) * d[0])
-        print(f"GEODES {geode_list}")
+        print(f"Quality: {geode_list}")
         
     print(geode_list)
-    
-    solution = 0
     solution = sum(geode_list)
     print(f"solution {solution}")
     
@@ -154,33 +149,33 @@ if __name__ == '__main__':
     EXPECTED_1 = 33
     EXPECTED_2 = 58
 
-#    print("###################new run###################")
-#    filename = 'example.txt'
-#    example_data = read_re(filename)
-#    example1 = first_part(example_data)
-#    if example1 != EXPECTED_1:
-#        exit()
-#    
-#    filename = 'input.txt'
-#    data = read_re(filename)
-#    solution = first_part(data)
-#
-#    print("************************************")
-#    print("*** PART 1 SOLUTION ****************")
-#    print("************************************")
-#    print(solution)
-#    pyperclip.copy(str(solution))
-#    # Guessed 67
-#    # Guessed 71
-#    # Solution 1144
+    print("###################new run###################")
+    filename = 'example.txt'
+    example_data = read_re(filename)
+    example1 = first_part(example_data)
+    if example1 != EXPECTED_1:
+        exit()
+    
+    filename = 'input.txt'
+    data = read_re(filename)
+    solution = first_part(data)
+
+    print("************************************")
+    print("*** PART 1 SOLUTION ****************")
+    print("************************************")
+    print(f"solution: {solution}")
+    pyperclip.copy(str(solution))
+    # Guessed 67
+    # Guessed 71
+    # Solution 1144
     
     ## PART 2
     print("---- Part 2 Start  ---------------")
-#    filename = 'example.txt'
-#    example_data = read_re(filename)
-#    example2 = second_part(example_data)
-#    if example2 != EXPECTED_2:
-#        exit()
+    filename = 'example.txt'
+    example_data = read_re(filename)
+    example2 = second_part(example_data)
+    if example2 != EXPECTED_2:
+        exit()
 
     filename = 'input.txt'
     data = read_re(filename)
