@@ -60,21 +60,40 @@ def run(time_passed, materials, robots, next_robot, d, time_limit=24):
     if time_passed >= time_limit:
         return materials[3]
 
-    next_list = []
-    if materials[1] <= d[4]:
-        next_list += ['C']
-
-    if materials[0] <= max(d[2], d[3], d[5]):
-        next_list += ['R']
-
-    #next_list = ['C']
+#    # Part 1
+#    next_list = []
+#    if materials[1] <= d[4]:
+#        next_list += ['C']
+#
+#    if materials[0] <= max(d[2], d[3], d[5]):
+#        next_list += ['R']
+#
+#    #next_list = ['C']
 #    if sum(robots) < 5:
 #        next_list += ['R']
+#    # Some optimization
+#    if(robots[1] > 0):  # Only consider making obsidian robot if there is a clay robot
+#        next_list += ['O']
+#    if(robots[2] > 0):
+#        next_list += ['G']
+    
+    
+
+    # Part 2
+    next_list = []
+    if robots[0] < max(d[2], d[3], d[5]):
+        next_list += ['R']
+    if robots[1] < (d[4]):
+        next_list += ['C']
+
     # Some optimization
     if(robots[1] > 0):  # Only consider making obsidian robot if there is a clay robot
         next_list += ['O']
     if(robots[2] > 0):
         next_list += ['G']
+
+    if (robots[3]>3):
+        next_list = ['O', 'G']
 
     my_max = 0
     for next in next_list:
@@ -114,9 +133,9 @@ def second_part(data):
     max_blueprints = 3
     num_blueprints = 0
     for d in data:
+        num_blueprints += 1
         if num_blueprints > max_blueprints:
             break
-        num_blueprints += 1
         print(d)
         result_c = run(0, np.array([0,0,0,0]), np.array([1,0,0,0]),'C', d, time_limit=32)
         result_r = run(0, np.array([0,0,0,0]), np.array([1,0,0,0]),'R', d, time_limit=32)
@@ -127,8 +146,7 @@ def second_part(data):
         
     print(geode_list)
     
-    solution = 0
-    solution = sum(geode_list)
+    solution = np.prod(geode_list)
     print(f"solution {solution}")
     return solution
                 
@@ -158,11 +176,11 @@ if __name__ == '__main__':
     
     ## PART 2
     print("---- Part 2 Start  ---------------")
-    filename = 'example.txt'
-    example_data = read_re(filename)
-    example2 = second_part(example_data)
-    if example2 != EXPECTED_2:
-        exit()
+#    filename = 'example.txt'
+#    example_data = read_re(filename)
+#    example2 = second_part(example_data)
+#    if example2 != EXPECTED_2:
+#        exit()
 
     filename = 'input.txt'
     data = read_re(filename)
