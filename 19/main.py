@@ -2,6 +2,7 @@ import math
 import re
 import numpy as np
 import pyperclip
+import time
 import itertools
 
 def read_re(filename):
@@ -128,16 +129,21 @@ def second_part(data):
     max_blueprints = 3
     num_blueprints = 0
     for d in data:
+        start = time.time()
         num_blueprints += 1
         if num_blueprints > max_blueprints:
             break
-        print(d)
+        print(f"Data = {d}")
         result_c = run(0, np.array([0,0,0,0]), np.array([1,0,0,0]),'C', d, time_limit=32)
+        print("Finished iterations starting with clay")
         result_r = run(0, np.array([0,0,0,0]), np.array([1,0,0,0]),'R', d, time_limit=32)
+        print("Finished iterations starting with ore")
         
         print(max(result_c, result_r))
         geode_list.append(max(result_c, result_r))
         print(f"GEODES {geode_list}")
+        
+        print(f"Elapsed time = {time.time()-start} seconds")
         
     print(geode_list)
     
@@ -147,7 +153,7 @@ def second_part(data):
                 
 if __name__ == '__main__':
     EXPECTED_1 = 33
-    EXPECTED_2 = 58
+    EXPECTED_2 = 62 * 56
 
     print("###################new run###################")
     filename = 'example.txt'
