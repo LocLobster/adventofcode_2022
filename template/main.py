@@ -42,7 +42,7 @@ if __name__ == '__main__':
     print("************************************")
     print("*** PART 1 SOLUTION ****************")
     print("************************************")
-    print(solution)
+    print(f"P1 Solution: {solution}")
     pyperclip.copy(str(solution))
     
     ## PART 2
@@ -60,5 +60,5 @@ if __name__ == '__main__':
     print("---------------------------------")
     print("---- Part 2 solution ------------")
     print("---------------------------------")
-    print(solution)
+    print(f"P2 Solution: {solution}")
     pyperclip.copy(str(solution))

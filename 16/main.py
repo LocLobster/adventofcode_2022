@@ -50,45 +50,45 @@ def get_distance(data, start):
 def get_grid(data):
     grid = np.zeros((len(data), len(data)), dtype=int)
 
-def get_permutations(iterable, distance_map, r=None):
-    # permutations('ABCD', 2) --> AB AC AD BA BC BD CA CB CD DA DB DC
-    # permutations(range(3)) --> 012 021 102 120 201 210
-    pool = tuple(iterable)
-    n = len(pool)
-    r = n if r is None else r
-    if r > n:
-        return
-    indices = list(range(n))
-    cycles = list(range(n, n-r, -1))
-    yield tuple(pool[i] for i in indices[:r])
-
-    while n:
-        for i in reversed(range(r)):
-            cycles[i] -= 1
-            if cycles[i] == 0:
-                indices[i:] = indices[i+1:] + indices[i:i+1]
-                cycles[i] = n - i
-            else:
-                j = cycles[i]
-                indices[i], indices[-j] = indices[-j], indices[i]
-
-                yield tuple(pool[i] for i in indices[:r])
-                break
-        else:
-            return
-
-def get_perms(sorted_map, location='AA', nodes=[], level=0):
-    #print('get_perms')
-    #print(sorted_map[location])
-
-    d = sorted_map[location]
-    d = dict((k, v) for k, v in d.items() if v <= 5)
-
-    if level < 3:
-        for k, v in d.items():
-            k = get_perms(sorted_map, location=k, nodes=nodes+[k], level=level+1)
-    else:
-        return d
+#def get_permutations(iterable, distance_map, r=None):
+#    # permutations('ABCD', 2) --> AB AC AD BA BC BD CA CB CD DA DB DC
+#    # permutations(range(3)) --> 012 021 102 120 201 210
+#    pool = tuple(iterable)
+#    n = len(pool)
+#    r = n if r is None else r
+#    if r > n:
+#        return
+#    indices = list(range(n))
+#    cycles = list(range(n, n-r, -1))
+#    yield tuple(pool[i] for i in indices[:r])
+#
+#    while n:
+#        for i in reversed(range(r)):
+#            cycles[i] -= 1
+#            if cycles[i] == 0:
+#                indices[i:] = indices[i+1:] + indices[i:i+1]
+#                cycles[i] = n - i
+#            else:
+#                j = cycles[i]
+#                indices[i], indices[-j] = indices[-j], indices[i]
+#
+#                yield tuple(pool[i] for i in indices[:r])
+#                break
+#        else:
+#            return
+#
+#def get_perms(sorted_map, location='AA', nodes=[], level=0):
+#    #print('get_perms')
+#    #print(sorted_map[location])
+#
+#    d = sorted_map[location]
+#    d = dict((k, v) for k, v in d.items() if v <= 5)
+#
+#    if level < 3:
+#        for k, v in d.items():
+#            k = get_perms(sorted_map, location=k, nodes=nodes+[k], level=level+1)
+#    else:
+#        return d
     
 
 def first_part(data, pressure):
@@ -96,7 +96,6 @@ def first_part(data, pressure):
     sorted_pressure = {k: v for k, v in sorted(pressure.items(), reverse=True, key=lambda item: item[1])}
 
     for p in sorted_pressure:
-        #print(pressure[p])
         if pressure[p] > 0:
             positive.append(p)
 
@@ -110,7 +109,7 @@ def first_part(data, pressure):
     max_pressure = 0
     time_limit = 30
     # 259,440,000 permutations 
-    permuations = itertools.permutations(positive, 8)
+    permuations = itertools.permutations(positive, min(len(positive), 8))
     num_perms = 0
     
     ## Best perm so far
@@ -238,23 +237,25 @@ def second_part(data, pressure, plan):
     return best_total
                 
 if __name__ == '__main__':
-#    print("###################new run###################")
-#    filename = 'example.txt'
-#    example_data, example_pressures = read_re(filename)
-#    example1 = first_part(example_data, example_pressures)
-#    if example1 != EXPECTED_1:
-#        exit()
-#    
-#    filename = 'input.txt'
-#    data, pressures = read_re(filename)
-#    solution = first_part(data, pressures)
-#
-#    print("************************************")
-#    print("*** PART 1 SOLUTION ****************")
-#    print("************************************")
-#    print(solution)
-#    pyperclip.copy(str(solution))
-#    
+    print("###################new run###################")
+    filename = 'example.txt'
+    example_data, example_pressures = read_re(filename)
+    example1 = first_part(example_data, example_pressures)
+    if example1 != EXPECTED_1:
+        exit()
+    
+    filename = 'input.txt'
+    data, pressures = read_re(filename)
+    solution = first_part(data, pressures)
+
+    print("************************************")
+    print("*** PART 1 SOLUTION ****************")
+    print("************************************")
+    print(solution)
+    pyperclip.copy(str(solution))
+    
+    exit()
+    
     ## PART 2
     example_plan = ('BB', 'CC', 'DD', 'EE', 'HH', 'JJ')
     filename = 'example.txt'
