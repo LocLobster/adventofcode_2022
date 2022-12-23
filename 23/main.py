@@ -66,8 +66,6 @@ def check_neighbor(elf, grid):
     x = elf[1]
 
     count = np.sum(grid[y-1:y+2, x-1:x+2])
-    if count == 0:
-        print('SOMETHING WENT WRONG')
     if count == 1:
         return True
     return False
@@ -81,7 +79,6 @@ def work(elf, grid, start_rule):
 
         success = False
         if rule == 0:
-            #print("try north")
             proposal, success = rule_north(elf, grid)
         elif rule == 1:
             proposal, success = rule_south(elf, grid)
@@ -93,13 +90,8 @@ def work(elf, grid, start_rule):
         if success:
             return proposal
             
-    #print("NO PROPOSAL")
-
 EXPECTED_1 = 110
 def first_part(data):
-    for d in data:
-        print(d)
-
     grid = np.zeros((len(data), len(data[0])), dtype=int)
     large_grid = np.zeros((grid.shape[0] * 2, grid.shape[1]*2), dtype=int)
     sub_y = math.trunc(grid.shape[0] / 2)
@@ -114,9 +106,6 @@ def first_part(data):
                 large_grid[elf] = 1
                 elves.append(elf)
                 
-    print(large_grid)
-    print(elves)
-
     iterations = 10
     for i in range(iterations):
         proposals = []
@@ -144,26 +133,15 @@ def first_part(data):
         if count_moved == 0:
             break
 
-        print(f"iteration  {i}") 
-        print(large_grid)
-
-    print(large_grid)
     sum_x = np.trim_zeros(np.sum(large_grid, axis=0))
     sum_y = np.trim_zeros(np.sum(large_grid, axis=1))
-
-    print(sum_y)
-    print(sum_x)
-
     solution = len(sum_x)*len(sum_y) - np.sum(large_grid)
 
     print(f"solution {solution}")
     return solution
 
-EXPECTED_2 = 5031
+EXPECTED_2 = 20
 def second_part(data):
-    for d in data:
-        print(d)
-
     grid = np.zeros((len(data), len(data[0])), dtype=int)
     large_grid = np.zeros((grid.shape[0] * 4, grid.shape[1]*4), dtype=int)
     sub_y = math.trunc(grid.shape[0] )
@@ -173,14 +151,10 @@ def second_part(data):
     for y, d in enumerate(data):
         for x, value in enumerate(d):
             if value == '#':
-                #grid[y][x] = 1
                 elf = (sub_y+y,sub_x+x)
                 large_grid[elf] = 1
                 elves.append(elf)
                 
-    print(large_grid)
-    print(elves)
-
     iterations = 10000
     for i in range(iterations):
         proposals = []
@@ -209,19 +183,8 @@ def second_part(data):
             break
 
         print(f"iteration  {i}   moved={count_moved}") 
-        #print(large_grid)
 
     solution = i+1
-#
-#    print(large_grid)
-#    sum_x = np.trim_zeros(np.sum(large_grid, axis=0))
-#    sum_y = np.trim_zeros(np.sum(large_grid, axis=1))
-#
-#    print(sum_y)
-#    print(sum_x)
-#
-#    solution = len(sum_x)*len(sum_y) - np.sum(large_grid)
-#
     print(f"solution {solution}")
     return solution
                 
@@ -245,18 +208,15 @@ if __name__ == '__main__':
     print(f"P1 Solution: {solution}")
     pyperclip.copy(str(solution))
     
-    #debug_get_next_coord()
-    #exit()
-    
     ## PART 2
     print("---- Part 2 Start  ---------------")
-#    filename = 'example.txt'
-#    example_data, example, pw = read_re(filename, pw)
-#    example2 = second_part(example_data)
-#    if example2 != EXPECTED_2:
-#        exit()
-#    else:
-#        print("Part 2 example success")
+    filename = 'example.txt'
+    example_data = read_re(filename)
+    example2 = second_part(example_data)
+    if example2 != EXPECTED_2:
+        exit()
+    else:
+        print("Part 2 example success")
 
     filename = 'input.txt'
     data = read_re(filename)
