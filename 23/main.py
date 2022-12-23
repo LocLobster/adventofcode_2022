@@ -156,17 +156,74 @@ def first_part(data):
 
     solution = len(sum_x)*len(sum_y) - np.sum(large_grid)
 
-
-#    large_grid[sub_y:sub_y+grid.shape[0], sub_x:sub_x+grid.shape[1]] = grid
-#    print(large_grid)
-#    print(large_grid.shape)
-                
     print(f"solution {solution}")
     return solution
 
 EXPECTED_2 = 5031
 def second_part(data):
-    pass
+    for d in data:
+        print(d)
+
+    grid = np.zeros((len(data), len(data[0])), dtype=int)
+    large_grid = np.zeros((grid.shape[0] * 4, grid.shape[1]*4), dtype=int)
+    sub_y = math.trunc(grid.shape[0] )
+    sub_x = math.trunc(grid.shape[1] )
+
+    elves = []
+    for y, d in enumerate(data):
+        for x, value in enumerate(d):
+            if value == '#':
+                #grid[y][x] = 1
+                elf = (sub_y+y,sub_x+x)
+                large_grid[elf] = 1
+                elves.append(elf)
+                
+    print(large_grid)
+    print(elves)
+
+    iterations = 10000
+    for i in range(iterations):
+        proposals = []
+        for elf in elves:
+            prop = work(elf, large_grid, i)
+            proposals.append(prop)
+
+        count_moved = 0
+        new_elves = []
+        for elf, prop in zip(elves, proposals):
+            if prop is None: # no elves around
+                new_elves.append(elf)
+            elif proposals.count(prop) > 1:
+                new_elves.append(elf)
+                continue
+            else:
+                count_moved += 1
+                new_elves.append(prop)
+
+        large_grid = np.zeros(large_grid.shape, dtype=int)
+        for elf in new_elves:
+            large_grid[elf] = 1
+        elves = new_elves
+
+        if count_moved == 0:
+            break
+
+        print(f"iteration  {i}   moved={count_moved}") 
+        #print(large_grid)
+
+    solution = i+1
+#
+#    print(large_grid)
+#    sum_x = np.trim_zeros(np.sum(large_grid, axis=0))
+#    sum_y = np.trim_zeros(np.sum(large_grid, axis=1))
+#
+#    print(sum_y)
+#    print(sum_x)
+#
+#    solution = len(sum_x)*len(sum_y) - np.sum(large_grid)
+#
+    print(f"solution {solution}")
+    return solution
                 
 if __name__ == '__main__':
     print("###################new run###################")
@@ -202,8 +259,8 @@ if __name__ == '__main__':
 #        print("Part 2 example success")
 
     filename = 'input.txt'
-    data, pw = read_re(filename)
-    solution = int(second_part(data, pw))
+    data = read_re(filename)
+    solution = int(second_part(data ))
 
     print("---------------------------------")
     print("---- Part 2 solution ------------")
